@@ -50,3 +50,43 @@ export function createProject(workspaceId:string,accessToken:string,input:Projec
 export function updateProject(workspaceId:string,projectId:string,accessToken:string,input:ProjectUpdate){
  return apiFetch<{project:Project}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/projects/"+encodeURIComponent(projectId),accessToken,{method:"PATCH",body:JSON.stringify(input)});
 }
+
+export type TaskStatus="backlog"|"ready"|"in_progress"|"blocked"|"review"|"testing"|"done";
+export type TaskPriority="low"|"normal"|"high"|"urgent";
+export type WorkItem={
+ id:string;workspaceId:string;projectId:string|null;title:string;description:string|null;status:TaskStatus;
+ priority:TaskPriority;dueAt:string|null;assignedUserId:string|null;assignedAgent:string|null;
+ acceptanceCriteria:string|null;latestEvidence:string|null;nextAction:string|null;
+ createdByUserId:string|null;createdAt:string;updatedAt:string;
+};
+export type TaskInput={
+ title:string;description:string|null;priority:TaskPriority;dueAt:string|null;projectId:string|null;
+ assignedAgent:string|null;acceptanceCriteria:string|null;
+};
+export type TaskUpdate={title?:string;description?:string|null;status?:TaskStatus;priority?:TaskPriority;dueAt?:string|null;projectId?:string|null;assignedAgent?:string|null;acceptanceCriteria?:string|null;latestEvidence?:string|null;nextAction?:string|null};
+export type AgentRequest={
+ id:string;agentKey:string;status:string;prompt:string;resultSummary:string|null;
+ createdAt:string;startedAt:string|null;completedAt:string|null;
+};
+export type TaskEvent={
+ id:string;workspaceId:string;workItemId:string;actorUserId:string|null;eventType:string;
+ fromStatus:string|null;toStatus:string|null;detail:string|null;createdAt:string;
+};
+export function getTasks(workspaceId:string,accessToken:string){
+ return apiFetch<{items:WorkItem[];limit:number;offset:number}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/tasks?limit=100&offset=0",accessToken);
+}
+export function createTask(workspaceId:string,accessToken:string,input:TaskInput){
+ return apiFetch<{item:WorkItem}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/tasks",accessToken,{method:"POST",body:JSON.stringify(input)});
+}
+export function updateTask(workspaceId:string,taskId:string,accessToken:string,input:TaskUpdate){
+ return apiFetch<{item:WorkItem}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/tasks/"+encodeURIComponent(taskId),accessToken,{method:"PATCH",body:JSON.stringify(input)});
+}
+export function createAgentRequest(workspaceId:string,taskId:string,accessToken:string,input:{prompt:string;agentKey:string}){
+ return apiFetch<{request:{id:string;status:string;agentKey:string;createdAt:string};message:string}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/tasks/"+encodeURIComponent(taskId)+"/agent-requests",accessToken,{method:"POST",body:JSON.stringify(input)});
+}
+export function getAgentRequests(workspaceId:string,taskId:string,accessToken:string){
+ return apiFetch<{requests:AgentRequest[]}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/tasks/"+encodeURIComponent(taskId)+"/agent-requests",accessToken);
+}
+export function getTaskEvents(workspaceId:string,taskId:string,accessToken:string){
+ return apiFetch<{events:TaskEvent[]}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/tasks/"+encodeURIComponent(taskId)+"/events",accessToken);
+}
