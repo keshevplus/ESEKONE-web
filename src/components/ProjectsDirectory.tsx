@@ -58,7 +58,7 @@ export function ProjectsDirectory(){
  return <section className="projects-page" dir={rtl?"rtl":"ltr"}>
   <div className="projects-heading">
    <div><div className="projects-eyebrow"><FolderKanban size={15}/>{t("all")}</div><h1>{t("title")}</h1><p>{t("subtitle")}</p></div>
-   <div className="projects-actions"><button className="projects-lang" onClick={()=>setLang(rtl?"en":"he")} aria-label="Change language">{rtl?"EN":"עב"}</button>{canWrite&&<button className="projects-add" onClick={()=>setShowForm(value=>!value)}>{showForm?<X size={17}/>:<Plus size={17}/ >}{showForm?t("cancel"):t("add")}</button>}</div>
+   <div className="projects-actions"><button className="projects-lang" onClick={()=>setLang(rtl?"en":"he")} aria-label="Change language">{rtl?"EN":"עב"}</button>{canWrite&&<button className="projects-add" onClick={()=>setShowForm(value=>!value)}>{showForm?<X size={17}/>:<Plus size={17}/>}{showForm?t("cancel"):t("add")}</button>}</div>
   </div>
   <div className="projects-summary">{allStatuses.map(status=><div key={status}><strong>{projects.filter(project=>project.status===status).length}</strong><span>{t(status)}</span></div>)}</div>
   {showForm&&canWrite&&<form className="projects-form" onSubmit={submit}>
