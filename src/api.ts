@@ -32,3 +32,20 @@ export function createContact(workspaceId:string,accessToken:string,input:Contac
 export function updateContact(workspaceId:string,contactId:string,accessToken:string,input:Partial<ContactInput>){
  return apiFetch<{contact:Contact}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/contacts/"+encodeURIComponent(contactId),accessToken,{method:"PATCH",body:JSON.stringify(input)});
 }
+
+export type ProjectStatus="planned"|"active"|"on_hold"|"completed"|"archived";
+export type Project={
+ id:string;workspaceId:string;name:string;description:string|null;status:ProjectStatus;
+ ownerUserId:string|null;startAt:string|null;dueAt:string|null;
+ createdByUserId:string|null;createdAt:string;updatedAt:string;
+};
+export type ProjectInput={name:string;description:string|null;status:"planned"|"active"};
+export function getProjects(workspaceId:string,accessToken:string){
+ return apiFetch<{items:Project[];limit:number;offset:number}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/projects?limit=100&offset=0",accessToken);
+}
+export function createProject(workspaceId:string,accessToken:string,input:ProjectInput){
+ return apiFetch<{project:Project}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/projects",accessToken,{method:"POST",body:JSON.stringify(input)});
+}
+export function updateProject(workspaceId:string,projectId:string,accessToken:string,input:Partial<ProjectInput>){
+ return apiFetch<{project:Project}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/projects/"+encodeURIComponent(projectId),accessToken,{method:"PATCH",body:JSON.stringify(input)});
+}
