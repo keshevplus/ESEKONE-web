@@ -16,3 +16,19 @@ async function apiFetch<T>(path:string,accessToken:string,init:RequestInit={}):P
 export function getCurrentUser(accessToken:string){return apiFetch<CurrentUser>("/v1/me",accessToken);}
 export function getWorkspaceOverview(workspaceId:string,accessToken:string){return apiFetch<WorkspaceOverview>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/overview",accessToken);}
 export function createWorkspace(accessToken:string,input:{organizationName:string;organizationSlug:string;workspaceName:string;workspaceSlug:string}){return apiFetch<{workspace:{id:string}}>("/v1/onboarding/workspaces",accessToken,{method:"POST",body:JSON.stringify(input)});}
+
+export type ContactStatus="lead"|"customer"|"inactive";
+export type Contact={
+ id:string;workspaceId:string;fullName:string;email:string|null;phone:string|null;company:string|null;
+ status:ContactStatus;createdAt:string;updatedAt:string;
+};
+export type ContactInput={fullName:string;email:string|null;phone:string|null;company:string|null;status:ContactStatus};
+export function getContacts(workspaceId:string,accessToken:string){
+ return apiFetch<{items:Contact[];limit:number;offset:number}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/contacts?limit=100&offset=0",accessToken);
+}
+export function createContact(workspaceId:string,accessToken:string,input:ContactInput){
+ return apiFetch<{contact:Contact}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/contacts",accessToken,{method:"POST",body:JSON.stringify(input)});
+}
+export function updateContact(workspaceId:string,contactId:string,accessToken:string,input:Partial<ContactInput>){
+ return apiFetch<{contact:Contact}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/contacts/"+encodeURIComponent(contactId),accessToken,{method:"PATCH",body:JSON.stringify(input)});
+}

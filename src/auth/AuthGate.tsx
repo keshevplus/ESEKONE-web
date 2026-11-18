@@ -4,7 +4,7 @@ import {apiConfigured,authConfigured,restoreUser,signIn,signOut} from "./index";
 import {createWorkspace,getCurrentUser,getWorkspaceOverview,type CurrentUser,type WorkspaceOverview,type WorkspaceSummary} from "../api";
 type Props={children:ReactNode};
 type State={loading:boolean;user:User|null;profile:CurrentUser|null;overview:WorkspaceOverview|null;overviewError:string|null;error:string|null};
-type WorkspaceContextValue={profile:CurrentUser;workspace:WorkspaceSummary|null;overview:WorkspaceOverview|null;overviewError:string|null};
+type WorkspaceContextValue={profile:CurrentUser;workspace:WorkspaceSummary|null;accessToken:string;overview:WorkspaceOverview|null;overviewError:string|null};
 const WorkspaceContext=createContext<WorkspaceContextValue|null>(null);
 export function useWorkspace(){const value=useContext(WorkspaceContext);if(!value)throw new Error("useWorkspace must be used inside AuthGate");return value;}
 export function AuthGate({children}:Props){
@@ -23,7 +23,7 @@ export function AuthGate({children}:Props){
  if(!state.user||!state.profile)return <main style={shellStyle}><section style={cardStyle}><strong style={{letterSpacing:2,color:"#5b67cf"}}>ESEKONE</strong><h1>Your business, connected.</h1><p>Sign in with your organization account to open your workspace.</p>{state.error&&<p role="alert" style={{color:"#a33"}}>{state.error}</p>}<button onClick={()=>void signIn()} style={{padding:"12px 18px",border:0,borderRadius:10,background:"#5968e8",color:"#fff",fontWeight:650,cursor:"pointer"}}>Continue with secure sign-in</button></section></main>;
  if(state.profile.workspaces.length===0)return <OnboardingCard accessToken={state.user.access_token} onCreated={()=>window.location.reload()}/>;
  const workspace=state.profile.workspaces[0]??null;
- return <WorkspaceContext.Provider value={{profile:state.profile,workspace,overview:state.overview,overviewError:state.overviewError}}><><div style={{padding:"9px 18px",background:"#eef1ff",borderBottom:"1px solid #dfe4ff",display:"flex",justifyContent:"space-between",alignItems:"center",gap:12,fontSize:13}}><span>Connected as <b>{state.profile.user.displayName||state.profile.user.email}</b> · {state.profile.workspaces.length} workspace(s) available</span><button onClick={()=>void signOut()} style={{border:0,background:"transparent",color:"#4454bd",cursor:"pointer"}}>Sign out</button></div>{children}</></WorkspaceContext.Provider>;
+ return <WorkspaceContext.Provider value={{profile:state.profile,workspace,accessToken:state.user.access_token,overview:state.overview,overviewError:state.overviewError}}><><div style={{padding:"9px 18px",background:"#eef1ff",borderBottom:"1px solid #dfe4ff",display:"flex",justifyContent:"space-between",alignItems:"center",gap:12,fontSize:13}}><span>Connected as <b>{state.profile.user.displayName||state.profile.user.email}</b> · {state.profile.workspaces.length} workspace(s) available</span><button onClick={()=>void signOut()} style={{border:0,background:"transparent",color:"#4454bd",cursor:"pointer"}}>Sign out</button></div>{children}</></WorkspaceContext.Provider>;
 }
 function OnboardingCard({accessToken,onCreated}:{accessToken:string;onCreated:()=>void}){
  const [organizationName,setOrganizationName]=useState("");const [organizationSlug,setOrganizationSlug]=useState("");const [workspaceName,setWorkspaceName]=useState("");const [busy,setBusy]=useState(false);const [error,setError]=useState<string|null>(null);
