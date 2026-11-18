@@ -66,6 +66,7 @@ export type TaskInput={
 export type TaskUpdate={title?:string;description?:string|null;status?:TaskStatus;priority?:TaskPriority;dueAt?:string|null;projectId?:string|null;assignedAgent?:string|null;acceptanceCriteria?:string|null;latestEvidence?:string|null;nextAction?:string|null};
 export type AgentRequest={
  id:string;agentKey:string;status:string;prompt:string;resultSummary:string|null;
+ attemptCount?:number;maxAttempts?:number;
  createdAt:string;startedAt:string|null;completedAt:string|null;
 };
 export type TaskEvent={
