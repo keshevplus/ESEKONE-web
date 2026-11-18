@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AuthGate } from './auth/AuthGate';
 import { Activity, ArrowDownRight, ArrowUpRight, Bell, BriefcaseBusiness, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, CircleHelp, Command, CreditCard, FileText, FolderKanban, LayoutDashboard, Menu, MessageSquare, MoreHorizontal, Plus, Search, Settings2, ShoppingBag, Sparkles, Users, Workflow, X } from 'lucide-react';
 
 const copy = {
@@ -29,7 +30,5 @@ function DashboardPreview(){
   </main>
  </div>
 }
-export default App;
-import { AuthGate } from './auth/AuthGate';
 function App(){return <AuthGate><DashboardPreview/></AuthGate>}
 export default App;
