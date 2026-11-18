@@ -49,6 +49,16 @@ export function TasksDirectory(){
   finally{setLoading(false);}
  }
  useEffect(()=>{void reload();},[workspace?.workspaceId,accessToken]);
+ useEffect(()=>{
+  const refresh=()=>{
+   if(document.visibilityState!=="visible"||!workspace?.workspaceId)return;
+   void getTasks(workspace.workspaceId,accessToken).then(result=>setTasks(result.items)).catch(()=>undefined);
+   if(expandedId)void loadDetails(expandedId);
+  };
+  const timer=window.setInterval(refresh,15000);
+  document.addEventListener("visibilitychange",refresh);
+  return ()=>{window.clearInterval(timer);document.removeEventListener("visibilitychange",refresh);};
+ },[workspace?.workspaceId,accessToken,expandedId]);
  const filtered=useMemo(()=>{
   const normalized=query.trim().toLocaleLowerCase();
   return tasks.filter(task=>{
