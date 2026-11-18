@@ -40,12 +40,13 @@ export type Project={
  createdByUserId:string|null;createdAt:string;updatedAt:string;
 };
 export type ProjectInput={name:string;description:string|null;status:"planned"|"active"};
+export type ProjectUpdate={name?:string;description?:string|null;status?:ProjectStatus};
 export function getProjects(workspaceId:string,accessToken:string){
  return apiFetch<{items:Project[];limit:number;offset:number}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/projects?limit=100&offset=0",accessToken);
 }
 export function createProject(workspaceId:string,accessToken:string,input:ProjectInput){
  return apiFetch<{project:Project}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/projects",accessToken,{method:"POST",body:JSON.stringify(input)});
 }
-export function updateProject(workspaceId:string,projectId:string,accessToken:string,input:Partial<ProjectInput>){
+export function updateProject(workspaceId:string,projectId:string,accessToken:string,input:ProjectUpdate){
  return apiFetch<{project:Project}>("/v1/workspaces/"+encodeURIComponent(workspaceId)+"/projects/"+encodeURIComponent(projectId),accessToken,{method:"PATCH",body:JSON.stringify(input)});
 }
