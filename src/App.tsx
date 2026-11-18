@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AuthGate, useWorkspace } from './auth/AuthGate';
 import { CustomerDirectory } from './components/CustomerDirectory';
 import { ProjectsDirectory } from './components/ProjectsDirectory';
+import { WorkCalendar } from './components/WorkCalendar';
 import { TasksDirectory } from './components/TasksDirectory';
 import { Activity, ArrowDownRight, ArrowUpRight, Bell, BriefcaseBusiness, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, CircleHelp, Command, CreditCard, FileText, FolderKanban, LayoutDashboard, Menu, MessageSquare, MoreHorizontal, Plus, Search, Settings2, ShoppingBag, Sparkles, Users, Workflow, X } from 'lucide-react';
 
@@ -25,7 +26,7 @@ function DashboardPreview(){
   <main className="main">
    <div role="status" style={{margin:'12px 24px',padding:'10px 14px',border:'1px solid #d9dffb',borderRadius:10,background:'#f5f6ff',color:'#3f4d9a',fontSize:13}}>Live workspace metrics and recent tasks are loaded from your ESEKONE workspace.</div>
    <header className="topbar"><button className="mobile-menu" onClick={()=>setMenu(true)}><Menu/></button><div className="crumb">{workspace?.workspaceName||"Workspace"} <span>/</span> <b>{active}</b></div><div className="top-actions"><button className="icon-button" onClick={()=>setLang(lang==='en'?'he':'en')}>{lang==='en'?'עב':'EN'}</button><button className="icon-button"><Search size={18}/></button><button className="icon-button notification"><Bell size={18}/><i/></button><div className="top-avatar">AM</div></div></header>
-   <div className="content">{active==='Tasks'?<TasksDirectory/>:active==='Projects'?<ProjectsDirectory/>:active==='Customers'?<CustomerDirectory/>:<><div className="welcome-row"><div><div className="eyebrow"><span className="live-dot"/>{t('allSystems')}</div><h1>{active==='Dashboard'?t('welcome')+', '+firstName:active}</h1><p>{t('subtitle')}</p></div><button className="primary-button"><Plus size={17}/>{t('new')}</button></div>
+   <div className="content">{active==='Calendar'?<WorkCalendar/>:active==='Tasks'?<TasksDirectory/>:active==='Projects'?<ProjectsDirectory/>:active==='Customers'?<CustomerDirectory/>:<><div className="welcome-row"><div><div className="eyebrow"><span className="live-dot"/>{t('allSystems')}</div><h1>{active==='Dashboard'?t('welcome')+', '+firstName:active}</h1><p>{t('subtitle')}</p></div><button className="primary-button"><Plus size={17}/>{t('new')}</button></div>
     <section className="metric-grid">{[
      {name:lang==='en'?'Contacts':'אנשי קשר',value:overview?.metrics.contactsTotal??'—',change:lang==='en'?'Total records':'רשומות',icon:Users,series:'M8 32 L22 26 L35 29 L48 16 L61 21 L74 8 L88 12'},
      {name:lang==='en'?'Customers':'לקוחות',value:overview?.metrics.customersTotal??'—',change:lang==='en'?'Customer records':'לקוחות במערכת',icon:BriefcaseBusiness,series:'M8 29 L22 22 L35 25 L48 14 L61 19 L74 10 L88 7'},
