@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AuthGate } from './auth/AuthGate';
 import { Activity, ArrowDownRight, ArrowUpRight, Bell, BriefcaseBusiness, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, CircleHelp, Command, CreditCard, FileText, FolderKanban, LayoutDashboard, Menu, MessageSquare, MoreHorizontal, Plus, Search, Settings2, ShoppingBag, Sparkles, Users, Workflow, X } from 'lucide-react';
 
 const copy = {
@@ -6,7 +7,7 @@ const copy = {
   he: { overview:'סקירה כללית', workspace:'סביבת עבודה', dashboard:'לוח בקרה', customers:'לקוחות', projects:'פרויקטים', calendar:'יומן', commerce:'מסחר', documents:'מסמכים', automation:'אוטומציות', insights:'תובנות', settings:'הגדרות', welcome:'בוקר טוב, אלכס', subtitle:'כך העסק שלך מתקדם היום.', new:'יצירה חדשה', revenue:'הכנסות', customersActive:'לקוחות פעילים', tasks:'משימות פתוחות', conversion:'שיעור המרה', activity:'דופק העסק', pipeline:'צינור מכירות', view:'הצגת הכול', tasksDue:'הפוקוס שלך להיום', allSystems:'כל המערכות פעילות', assistant:'שאל את העוזר העסקי', assistantHint:'שאל על לקוחות, סדרי עדיפויות וביצועים…' }
 };
 const nav = [{label:'Overview',items:[['Dashboard',LayoutDashboard],['Customers',Users],['Projects',FolderKanban],['Calendar',CalendarDays]]},{label:'Operate',items:[['Commerce',ShoppingBag],['Documents',FileText],['Automation',Workflow],['Insights',ChartNoAxesCombined]]}];
-function App(){
+function DashboardPreview(){
  const [lang,setLang]=useState<'en'|'he'>(()=>typeof navigator!=='undefined'&&navigator.language.toLowerCase().startsWith('he')?'he':'en'); const [active,setActive]=useState('Dashboard'); const [menu,setMenu]=useState(false); const [query,setQuery]=useState('');
  const t=(key:keyof typeof copy.en)=>copy[lang][key]||copy.en[key]; const rtl=lang==='he';
  return <div className={rtl?'app rtl':'app'} dir={rtl?'rtl':'ltr'}>
@@ -17,6 +18,7 @@ function App(){
    <div className="sidebar-bottom"><div className="plan-card"><div className="plan-icon"><Sparkles size={16}/></div><b>Make more happen</b><p>Unlock more of your business with ESEKONE Pro.</p><button>Explore plans <ArrowUpRight size={14}/></button></div><button className="nav-item"><Settings2 size={17}/><span>{t('settings')}</span></button><div className="profile"><div className="profile-avatar">AM</div><span><b>Alex Morgan</b><small>Owner · Admin</small></span><MoreHorizontal size={18}/></div></div>
   </aside>
   <main className="main">
+   <div role="status" style={{margin:'12px 24px',padding:'10px 14px',border:'1px solid #d9dffb',borderRadius:10,background:'#f5f6ff',color:'#3f4d9a',fontSize:13}}>Preview figures are illustrative sample data, not live business results. Live workspace data is being connected.</div>
    <header className="topbar"><button className="mobile-menu" onClick={()=>setMenu(true)}><Menu/></button><div className="crumb">Northstar Studio <span>/</span> <b>{active}</b></div><div className="top-actions"><button className="icon-button" onClick={()=>setLang(lang==='en'?'he':'en')}>{lang==='en'?'עב':'EN'}</button><button className="icon-button"><Search size={18}/></button><button className="icon-button notification"><Bell size={18}/><i/></button><div className="top-avatar">AM</div></div></header>
    <div className="content"><div className="welcome-row"><div><div className="eyebrow"><span className="live-dot"/>{t('allSystems')}</div><h1>{active==='Dashboard'?t('welcome'):active}</h1><p>{t('subtitle')}</p></div><button className="primary-button"><Plus size={17}/>{t('new')}</button></div>
     <section className="metric-grid">{[{name:t('revenue'),value:'$48,290',change:'+12.8%',up:true,icon:CreditCard,series:'M8 32 L22 26 L35 29 L48 16 L61 21 L74 8 L88 12'},{name:t('customersActive'),value:'1,284',change:'+8.2%',up:true,icon:Users,series:'M8 29 L22 22 L35 25 L48 14 L61 19 L74 10 L88 7'},{name:t('tasks'),value:'36',change:'8 due today',up:false,icon:Check,series:'M8 8 L22 16 L35 13 L48 23 L61 18 L74 29 L88 24'},{name:t('conversion'),value:'6.24%',change:'+1.4%',up:true,icon:Activity,series:'M8 30 L22 26 L35 27 L48 18 L61 21 L74 12 L88 7'}].map((m,i)=><article className="metric-card" key={m.name}><div className="metric-head"><span>{m.name}</span><m.icon size={17}/></div><strong>{m.value}</strong><div className="metric-foot"><span className={m.up?'positive':'neutral'}>{m.up?<ArrowUpRight size={14}/>:<ArrowDownRight size={14}/>} {m.change}</span><svg viewBox="0 0 96 38" aria-hidden="true"><path d={m.series}/></svg></div></article>)}</section>
@@ -28,4 +30,5 @@ function App(){
   </main>
  </div>
 }
+function App(){return <AuthGate><DashboardPreview/></AuthGate>}
 export default App;
