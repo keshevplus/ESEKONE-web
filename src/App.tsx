@@ -7,7 +7,7 @@ const copy = {
 };
 const nav = [{label:'Overview',items:[['Dashboard',LayoutDashboard],['Customers',Users],['Projects',FolderKanban],['Calendar',CalendarDays]]},{label:'Operate',items:[['Commerce',ShoppingBag],['Documents',FileText],['Automation',Workflow],['Insights',ChartNoAxesCombined]]}];
 function App(){
- const [lang,setLang]=useState<'en'|'he'>('en'); const [active,setActive]=useState('Dashboard'); const [menu,setMenu]=useState(false); const [query,setQuery]=useState('');
+ const [lang,setLang]=useState<'en'|'he'>(()=>typeof navigator!=='undefined'&&navigator.language.toLowerCase().startsWith('he')?'he':'en'); const [active,setActive]=useState('Dashboard'); const [menu,setMenu]=useState(false); const [query,setQuery]=useState('');
  const t=(key:keyof typeof copy.en)=>copy[lang][key]||copy.en[key]; const rtl=lang==='he';
  return <div className={rtl?'app rtl':'app'} dir={rtl?'rtl':'ltr'}>
   <aside className={menu?'sidebar open':'sidebar'}>
