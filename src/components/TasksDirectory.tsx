@@ -107,7 +107,7 @@ export function TasksDirectory(){
  }
  const counts=useMemo(()=>Object.fromEntries(statuses.map(status=>[status,tasks.filter(task=>task.status===status).length])) as Record<TaskStatus,number>,[tasks]);
  return <section className="tasks-page" dir={rtl?"rtl":"ltr"}>
-  <div className="tasks-heading"><div><div className="tasks-eyebrow"><Workflow size={15}/>{t("all")}</div><h1>{t("title")}</h1><p>{t("subtitle")}</p></div><div className="tasks-heading-actions"><button className="tasks-lang" onClick={()=>setLang(rtl?"en":"he")} aria-label="Change language">{rtl?"EN":"עב"}</button>{canWrite&&<button className="tasks-add" onClick={()=>setShowForm(value=>!value)}>{showForm?<X size={17}/>:<Plus size={17}/ >}{showForm?t("cancel"):t("add")}</button>}</div></div>
+  <div className="tasks-heading"><div><div className="tasks-eyebrow"><Workflow size={15}/>{t("all")}</div><h1>{t("title")}</h1><p>{t("subtitle")}</p></div><div className="tasks-heading-actions"><button className="tasks-lang" onClick={()=>setLang(rtl?"en":"he")} aria-label="Change language">{rtl?"EN":"עב"}</button>{canWrite&&<button className="tasks-add" onClick={()=>setShowForm(value=>!value)}>{showForm?<X size={17}/>:<Plus size={17}/>}{showForm?t("cancel"):t("add")}</button>}</div></div>
   <div className="tasks-summary">{statuses.map(status=><button key={status} className={filter===status?"selected":""} onClick={()=>setFilter(filter===status?"all":status)}><strong>{counts[status]}</strong><span>{t(status)}</span></button>)}</div>
   {showForm&&canWrite&&<form className="tasks-form" onSubmit={submitTask}>
    <label>{t("task")} *<input required minLength={1} maxLength={200} value={form.title} onChange={event=>setForm(value=>({...value,title:event.target.value}))}/></label>
