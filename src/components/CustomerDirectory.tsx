@@ -1,5 +1,5 @@
 import {useEffect,useMemo,useState,type FormEvent} from "react";
-import {Building2,Mail,Phone,Plus,Search,Users,X} from "lucide-react";
+import {Mail,Phone,Plus,Search,Users,X} from "lucide-react";
 import {createContact,getContacts,updateContact,type Contact,type ContactStatus} from "../api";
 import {useWorkspace} from "../auth/AuthGate";
 
@@ -74,7 +74,7 @@ export function CustomerDirectory(){
    <div><div className="customers-eyebrow"><Users size={15}/>{t("all")}</div><h1>{t("title")}</h1><p>{t("subtitle")}</p></div>
    <div className="customers-heading-actions">
     <button className="customers-lang" onClick={()=>setLang(rtl?"en":"he")} aria-label="Change language">{rtl?"EN":"עב"}</button>
-    {canWrite&&<button className="customers-add" onClick={()=>setShowForm(value=>!value)}>{showForm?<X size={17}/>:<Plus size={17}/ >}{showForm?t("cancel"):t("add")}</button>}
+    {canWrite&&<button className="customers-add" onClick={()=>setShowForm(value=>!value)}>{showForm?<X size={17}/>:<Plus size={17}/>}{showForm?t("cancel"):t("add")}</button>}
    </div>
   </div>
   <div className="customers-stats">
